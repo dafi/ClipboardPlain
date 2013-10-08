@@ -140,7 +140,13 @@ enum {
 }
 
 - (void)cleanContent {
-    NSString* bestType = [self.pasteboard availableTypeFromArray:self.supportedTypes];
+    NSString* bestType = [self.pasteboard availableTypeFromArray:[NSArray arrayWithObjects: NSFilenamesPboardType, NSStringPboardType, nil]];
+    
+    if(![bestType  isEqual: @"NSStringPboardType"]) {
+        previousChangeCount = self.pasteboard.changeCount;
+        return;
+    }
+    
     NSString* text = [self.pasteboard stringForType:bestType];
     
     if (text) {
